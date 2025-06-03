@@ -9,7 +9,8 @@ from ultralytics import YOLO
 model = YOLO("yolo11n-pose.pt")  # load an official model
 
 # Predict with the model
-results = model("https://ultralytics.com/images/bus.jpg")  # predict on an image
+# results = model("https://ultralytics.com/images/bus.jpg")  # predict on an image need load
+results = model("bus.jpg")  # predict on an image
 
 img = results[0].plot()
 cv2.imshow("", img)
