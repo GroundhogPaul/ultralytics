@@ -16,9 +16,8 @@ model.export(format="ncnn", device="cpu")
 
 # ----- load the exported model ----- #
 ncnn_model = YOLO(
-    # "runs/LapaTrain/train_20250613_128x128/weights/best_ncnn_model", 
     sModelOutputPath,
-    task="pose",
+    task = "pose",
     )
 
 # ----- test the exported model ----- #
@@ -26,6 +25,7 @@ lstRes = ncnn_model("BabySmile.jpg",
                     verbose=True, 
                     nms=True, conf=0.25, iou=0.7,
                     imgsz=128, device="cpu", half=False,
+                    single_cls=True,
                     ) 
 Res = lstRes[0]
 img = Res.plot()
