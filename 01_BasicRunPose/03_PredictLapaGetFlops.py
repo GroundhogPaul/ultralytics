@@ -11,7 +11,7 @@ model = YOLO(sModelPath)
 results = model("BabySmile.jpg", verbose=False)  # predict on an image
 
 # ----- Plot using Official Class Results(SimpleClass) -----
-img = results[0].plot()
+img = results[0].plot(line_width=1, kpt_radius=1)
 cv2.imshow("", img)
 cv2.waitKey(0)
 

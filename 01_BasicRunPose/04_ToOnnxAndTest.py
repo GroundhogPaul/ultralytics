@@ -18,6 +18,6 @@ model.export(format="onnx", device="cpu")
 onnx_model = YOLO(sModelPathOnnx, task='pose', verbose=False)
 results = onnx_model("BabySmile.jpg", verbose=False, task='detect', device = "cpu", imgsz=128)  # predict on an image
 
-img = results[0].plot()
+img = results[0].plot(line_width=1, kpt_radius=1)
 cv2.imshow("", img)
 cv2.waitKey(0)
