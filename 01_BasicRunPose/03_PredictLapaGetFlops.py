@@ -15,6 +15,6 @@ img = results[0].plot(line_width=1, kpt_radius=1)
 cv2.imshow("", img)
 cv2.waitKey(0)
 
-# ----- Get GFlops -----
-GFlops = get_flops_with_torch_profiler(model, imgsz=[128, 128])
+# ----- Get GFlops ----
+GFlops = get_flops_with_torch_profiler(model, imgsz=[128, 96])
 print(GFlops)
