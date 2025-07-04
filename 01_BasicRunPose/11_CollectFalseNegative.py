@@ -1,3 +1,8 @@
+'''
+collect false negative images from a folder of images
+and save them to a specified output folder.
+'''
+
 import cv2
 import utilBasicRunPose
 from ultralytics import YOLO
@@ -5,6 +10,17 @@ import os
 import shutil
 
 def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf):
+    '''
+    Collect images with no faces detected by the model.
+    sModelPath: path to the YOLO model
+    sImgFolder: folder containing images to be processed
+    sNameDataSet: name of the dataset for output file naming
+    sFolderOut: name of the output folder to save images with no faces detected
+    conf: confidence threshold for face detection
+    '''
+    assert os.path.exists(sModelPath), "Model path does not exist: " + sModelPath
+    assert os.path.exists(sImgFolder), "Image folder does not exist: " + sImgFolder 
+
     # ----- load a model -----
     model = YOLO(sModelPath)
 
@@ -22,7 +38,7 @@ def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf)
     # ----- Predict with the model -----
     for sImgPath in lstImg:
         sFileName = sNameDataSet + "_" + os.path.basename(sImgPath)
-        results = model(sImgPath, verbose=False, imgsz = 32, device = '0', conf = conf)  # predict on an image
+        results = model(sImgPath, verbose=False, imgsz = 32, device = 'cpu', conf = conf)  # predict on an image
         res = results[0]
         if 1 == len(res):
             # print("1 face found: pass img ", sFileName)
@@ -37,9 +53,10 @@ def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf)
 sModelPath = "./runs/LapaTrain/01A_theSecond400epoch_rotate_mosaic/weights/best.pt"
 sNameDataSet = "ffhq"
 conf = 0.51
-# for i in range(0, 69001, 1000):
-for i in range(0, 02001, 1000):
+
+# Collect false negative images from multiple folders of 'ffhq' dataset
+for i in range(0, 69001, 1000):
     formatted_i = f"{i:05d}"
-    sImgFolder = "D:/users/xiaoyaopan/PxyAI/DataSet2/ffhq/images1024x1024/" + formatted_i
+    sImgFolder = "D:/PxyAI/DataSet2/ffhq/images1024x1024/" + formatted_i
     sFolderOut = "LapaFailed"
     CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf = conf)
