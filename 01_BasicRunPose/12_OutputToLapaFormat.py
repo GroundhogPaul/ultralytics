@@ -9,12 +9,12 @@ import os
 import shutil
 
 # ----- load a model -----
-sModelPath = "./runs/LapaTrain/01A_theFirst400epoch_rotate_mosaic/weights/best.pt"
+sModelPath = "./runs/LapaTrain/01A_2nd300epoch_rotate_mosaic_640/weights/best.pt"
 model = YOLO(sModelPath)
 
 # ----- collect images under a folder -----
 sNameDataSet = "LapaFN01"
-sImgsFolder = r"D:/PxyAI/DataSet2/ffhq/images1024x1024/01000/LapaFailed"
+sImgsFolder = r"D:/PxyAI/DataSet2/ffhq/images1024x1024/LapaFailed"
 sFolderOut = os.path.join(sImgsFolder, sNameDataSet + "_withLapaLabel")
 sFolderOut_0face = os.path.join(sFolderOut, "0face")
 sFolderOut_1face = os.path.join(sFolderOut, "1face") 

@@ -11,7 +11,7 @@ import shutil
 
 def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf):
     '''
-    Collect images with no faces detected by the model.
+    Collect images with face but cannot be detected by the model (false negative).
     sModelPath: path to the YOLO model
     sImgFolder: folder containing images to be processed
     sNameDataSet: name of the dataset for output file naming
