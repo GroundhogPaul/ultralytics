@@ -47,14 +47,14 @@ def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf)
         if 0 == len(res):
             print("0 face found: save img ", sFileName)
             shutil.copy2(sImgPath, sImgPathSave)
-        # if 1 < len(res):
-        #     print("len(res) face found: save img ", sFileName)
+        if 1 < len(res):
+            print("len(res) face found: pass img (1 face a time) ", sFileName)
 
 sModelPath = "./runs/LapaTrain/01A_theSecond400epoch_rotate_mosaic/weights/best.pt"
 sNameDataSet = "ffhq"
 conf = 0.51
 
-# Collect false negative images from multiple folders of 'ffhq' dataset
+# ----- Collect false negative images from multiple folders of 'ffhq' dataset ----- #
 for i in range(0, 69001, 1000):
     formatted_i = f"{i:05d}"
     sImgFolder = "D:/PxyAI/DataSet2/ffhq/images1024x1024/" + formatted_i

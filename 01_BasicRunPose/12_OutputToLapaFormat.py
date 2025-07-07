@@ -1,5 +1,5 @@
 '''
-create Lapa format dataset from train .pt 
+create Lapa format dataset from trained .pt 
 '''
 
 import cv2
@@ -16,13 +16,18 @@ model = YOLO(sModelPath)
 sNameDataSet = "LapaFN01"
 sImgsFolder = r"D:/PxyAI/DataSet2/ffhq/images1024x1024/LapaFailed"
 sFolderOut = os.path.join(sImgsFolder, sNameDataSet + "_withLapaLabel")
+
+# the 3 possible output type
 sFolderOut_0face = os.path.join(sFolderOut, "0face")
 sFolderOut_1face = os.path.join(sFolderOut, "1face") 
-sFolderOut_2face = os.path.join(sFolderOut, "2face")
+sFolderOut_2face = os.path.join(sFolderOut, "2face") # means 2 or more faces
+
 os.makedirs(sFolderOut, exist_ok=True)
 os.makedirs(sFolderOut_0face, exist_ok=True)
 os.makedirs(sFolderOut_1face, exist_ok=True)
 os.makedirs(sFolderOut_2face, exist_ok=True)
+
+# collect images under a folder
 lstImg = []
 for filename in os.listdir(sImgsFolder):
     full_path = os.path.join(sImgsFolder, filename)
@@ -49,7 +54,7 @@ for sImgPath in lstImg:
         cv2.imwrite(sImgPathSave, img)
         continue
 
-    if 1 == len(res):
+    if 1 == len(res): # this is the case we want, both img and label
         print("1 face found: save img and create label: ", sFileName)
         sFileNamePlot = os.path.splitext(sFileName)[0] + "_plot.png" 
         sImgPlotSavePath = os.path.join(sFolderOut_1face, sFileNamePlot)
@@ -69,4 +74,3 @@ for sImgPath in lstImg:
         for x,y in lstXY:
             # print(x, y)
             f.write(f"{x:.6f} {y:.6f}\n")
-
