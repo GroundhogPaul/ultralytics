@@ -9,14 +9,16 @@ from ultralytics import YOLO
 import os
 import shutil
 
-def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf):
+def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf, 
+                         sExt = 'jpg'):
     '''
     Collect images with face but cannot be detected by the model (false negative).
-    sModelPath: path to the YOLO model
-    sImgFolder: folder containing images to be processed
-    sNameDataSet: name of the dataset for output file naming
-    sFolderOut: name of the output folder to save images with no faces detected
-    conf: confidence threshold for face detection
+    input:
+        sModelPath: path to the YOLO model
+        sImgFolder: folder containing images to be processed
+        sNameDataSet: name of the dataset for output file name PREFIX
+        sFolderOut: name of the output folder to save images with no faces detected
+        conf: confidence threshold for face detection
     '''
     assert os.path.exists(sModelPath), "Model path does not exist: " + sModelPath
     assert os.path.exists(sImgFolder), "Image folder does not exist: " + sImgFolder 
@@ -30,7 +32,7 @@ def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf)
     lstImg = []
     for filename in os.listdir(sImgFolder):
         full_path = os.path.join(sImgFolder, filename)
-        if os.path.isfile(full_path) and filename.lower().endswith('.png'):
+        if os.path.isfile(full_path) and filename.lower().endswith(sExt):
             lstImg.append(os.path.normpath(full_path))
     print(lstImg[0])
     print(lstImg[-1])
@@ -51,12 +53,16 @@ def CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf)
             print("len(res) face found: pass img (1 face a time) ", sFileName)
 
 sModelPath = "./runs/LapaTrain/01A_theSecond400epoch_rotate_mosaic/weights/best.pt"
-sNameDataSet = "ffhq"
-conf = 0.51
 
 # ----- Collect false negative images from multiple folders of 'ffhq' dataset ----- #
-for i in range(0, 69001, 1000):
-    formatted_i = f"{i:05d}"
-    sImgFolder = "D:/PxyAI/DataSet2/ffhq/images1024x1024/" + formatted_i
-    sFolderOut = "LapaFailed"
-    CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf = conf)
+conf, sNameDataSet, sFolderOut = 0.51, "ffhq", "LapaFailed"
+# for i in range(0, 69001, 1000):
+#     formatted_i = f"{i:05d}"
+#     sImgFolder = "D:/PxyAI/DataSet2/ffhq/images1024x1024/" + formatted_i
+#     CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, conf = conf)
+
+# ----- Use this script to evalulate the input model for certain img ----- #
+conf, sNameDataSet, sFolderOut = 0.5, "OldFalseNegative", "FNstillFailed"
+# sImgFolder = r"D:\PxyAI\DataSet\Lapa_Plus-yolo11\FalseNegative\images\train"
+# CollectFalseNegative(sModelPath, sImgFolder, sNameDataSet, sFolderOut, 
+#                      conf = conf, sExt = '.png')
