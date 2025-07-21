@@ -6,13 +6,15 @@ import pnnx
 import os
 
 # ----- Load a model ----- #
-sModelPath = "./runs/LapaTrain/train_20250613_128x128/weights/best.pt"
+# sModelPath = "./runs/LapaTrain/01A_2nd500epoch_rotate_mosaic_128_smallBatch/weights/best.pt"
+sModelPath = "./runs/LapaTrain/176x3/weights/best.pt"
 sModelFolder = os.path.dirname(sModelPath)
 sModelOutputPath = os.path.join(sModelFolder, "best_ncnn_model")
 
 # ----- Convert and export ----- #
+Wnn, Hnn = 176, 144
 model = YOLO(sModelPath)
-model.export(format="ncnn", device="cpu", imgsz=(96, 128))
+model.export(format="ncnn", device="cpu", imgsz=(Hnn, Wnn))
 
 # ----- load the exported model ----- #
 ncnn_model = YOLO(
@@ -24,7 +26,7 @@ ncnn_model = YOLO(
 lstRes = ncnn_model("BabySmile_128x96.jpg", 
                     verbose=True, 
                     nms=True, conf=0.25, iou=0.7,
-                    imgsz=(96, 128), device="cpu", half=False,
+                    imgsz=(Hnn, Wnn), device="cpu", half=False,
                     single_cls=True
                     ) 
 Res = lstRes[0]
