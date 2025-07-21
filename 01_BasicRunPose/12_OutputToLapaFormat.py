@@ -1,5 +1,6 @@
 '''
 create Lapa format dataset from trained .pt 
+could also be used to test a .pt model
 '''
 
 import cv2
@@ -9,7 +10,10 @@ import os
 import shutil
 
 # ----- load a model -----
-sModelPath = "./runs/LapaTrain/01A_2nd300epoch_rotate_mosaic_640/weights/best.pt"
+sModelPath, imgSize = "./runs/LapaTrain/01A_3rd300epoch_rotate_mosaic_128/weights/best.pt", 32
+
+conf = 0.51
+
 model = YOLO(sModelPath)
 
 # ----- collect images under a folder -----
@@ -38,7 +42,7 @@ print(lstImg)
 # ----- Predict with the model -----
 for sImgPath in lstImg:
     sFileName = os.path.basename(sImgPath)
-    results = model(sImgPath, verbose=False, imgsz = 640, device = 'cpu')  # predict on an image
+    results = model(sImgPath, verbose=False, imgsz = imgSize, device = 'cpu', conf = conf)  # predict on an image
     res = results[0]
 
     # ----- save img ----- #
