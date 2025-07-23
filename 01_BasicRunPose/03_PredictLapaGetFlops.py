@@ -1,21 +1,30 @@
+'''
+1. test a trained.pt with a batch of images
+2. get GFlops
+'''
+
+import os
 import cv2
 import utilBasicRunPose
 from ultralytics import YOLO
 from ultralytics.utils.torch_utils import get_flops_with_torch_profiler
 
 # ----- load a model -----
-sModelPath = "./runs/LapaTrain/train_20250613_128x128/weights/best.pt"
+sModelPath, imgSize = "./runs/LapaTrain/176x/weights/best.pt", 176
 model = YOLO(sModelPath, task="pose")
-imgSize = 176
 
 # ----- Predict with the model -----
-# results = model("BabySmile.jpg", imgsz=imgSize, verbose=False)  # predict on an image
-results = model('D:/PxyAI/DataSet/Lapa/valPxy/*jpg', imgsz=imgSize, verbose=False)  # predict on an image
+sImgFolder = r"D:/PxyAI/DataSet/Lapa/valPxy"
+sImgFolder = r"D:/PxyAI/DataSet/Lapa_Plus-yolo11/FalsePositive250721/images/train"
+results = model(sImgFolder + '/*jpg', imgsz=imgSize, verbose=False, conf=0.5)  # predict on an image
 
 # ----- Plot using Official Class Results(SimpleClass) -----
+sFolderOut = os.path.join(sImgFolder, "plot_test")
+os.makedirs(sFolderOut, exist_ok=True)
 for res in results:
     img = res.plot(line_width=1, kpt_radius=1)
-    cv2.imwrite(res.path.replace('.jpg', '_plot.jpg'), img)
+    sImgOut = os.path.join(sFolderOut, os.path.basename(res.path))
+    cv2.imwrite(sImgOut, img)
     # cv2.imshow("", img)
     # cv2.waitKey(0)
 
