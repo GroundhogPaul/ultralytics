@@ -10,13 +10,18 @@ from ultralytics import YOLO
 from ultralytics.utils.torch_utils import get_flops_with_torch_profiler
 
 # ----- load a model -----
-sModelPath, imgSize = "./runs/LapaTrain/176x/weights/best.pt", 176
+sModelPath, imgSize = "./runs/LapaTrain/176xPruneStep2_1500epoch_L1shrinkBN/weights/best.pt", 176
 model = YOLO(sModelPath, task="pose")
 
 # ----- Predict with the model -----
-sImgFolder = r"D:/PxyAI/DataSet/Lapa/valPxy"
-sImgFolder = r"D:/PxyAI/DataSet/Lapa_Plus-yolo11/FalsePositive250721/images/train"
-results = model(sImgFolder + '/*jpg', imgsz=imgSize, verbose=False, conf=0.5)  # predict on an image
+sDataSetRootFolder = "../../../PxyAI/DataSet"
+assert os.path.exists(sDataSetRootFolder)
+sImgPosFolder = os.path.join(sDataSetRootFolder, "Lapa/valPxy")
+assert os.path.exists(sImgPosFolder)
+sImgNegFolder = os.path.join(sDataSetRootFolder, "Lapa_Plus-yolo11/FalsePositive250721/images/train")
+assert os.path.exists(sImgNegFolder)
+sImgFolder = sImgPosFolder
+results = model(sImgFolder + '/*.jpg', imgsz=imgSize, verbose=False, conf=0.5)  # predict on an image
 
 # ----- Plot using Official Class Results(SimpleClass) -----
 sFolderOut = os.path.join(sImgFolder, "plot_test")
