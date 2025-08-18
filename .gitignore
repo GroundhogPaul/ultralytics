@@ -171,3 +171,5 @@ pnnx*
 # calibration image
 calibration_*.npy
 *.jpg
+/LearnNote/01_LateConverge/176x1000epoch_MileStone
+/LearnNote/01_LateConverge/176xPruneStep2_1500epoch_L1shrinkBN
