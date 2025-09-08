@@ -173,3 +173,8 @@ calibration_*.npy
 *.jpg
 /LearnNote/01_LateConverge/176x1000epoch_MileStone
 /LearnNote/01_LateConverge/176xPruneStep2_1500epoch_L1shrinkBN
+/LearnNote/01_LateConverge/176x500epochTest_LR0.00002
+/LearnNote/01_LateConverge/176x500epochTest_LR0.001
+/LearnNote/01_LateConverge/160x1000epoch_MileStone
+/LearnNote/02_Delete32xds/160x1000epoch_delete32Ds
+/LearnNote/02_Delete32xds/160x1000epoch_MileStone
