@@ -16,7 +16,11 @@ yolo11-pose的官方结构
 
 最终Loss：box 0.614
 
+<<<<<<< Updated upstream
 训练集结果：TP 46182, FN 55, FP 85
+=======
+训练集结果：
+>>>>>>> Stashed changes
 
 ## 结构2：删除32x降采样分支，不保留注意力机制
 
@@ -24,11 +28,19 @@ yolo11-pose的官方结构
 
 最终Loss：box 0.701
 
+<<<<<<< Updated upstream
 训练集结果：TP 46151, FN 86, FP 382
 
 ## 结构3：删除32x降采样分支，保留注意力机制
 
 训练结果文件夹：TODO
+=======
+训练集结果：
+
+## 结构3：删除32x降采样分支，保留注意力机制
+
+训练结果文件夹：
+>>>>>>> Stashed changes
 
 最终Loss：
 
