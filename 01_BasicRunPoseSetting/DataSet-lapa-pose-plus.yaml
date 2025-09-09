@@ -1,6 +1,6 @@
 train:
   - D:/users/xiaoyaopan/PxyAI/DataSet/Lapa-yolo11/images/train
-  - D:/users/xiaoyaopan/PxyAI/DataSet/Lapa_Plus-yolo11/FalsePositive250721/images/train
+  - D:/users/xiaoyaopan/PxyAI/DataSet/Lapa_Plus-yolo11/FalsePositive/images/train
   - D:/users/xiaoyaopan/PxyAI/DataSet/Lapa_Plus-yolo11/Mosaic256/images/train
   - D:/users/xiaoyaopan/PxyAI/DataSet/Lapa_Plus-yolo11/FalseNegative250721/images/train
 val: D:/users/xiaoyaopan/PxyAI/DataSet/Lapa-yolo11/images/val
