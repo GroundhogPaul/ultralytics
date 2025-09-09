@@ -1,0 +1,25 @@
+# train_config.yaml # for resume train
+
+device: '1'
+# workers: 0
+
+## ----- scratch setting ----- ##
+# resume: false
+# pretrained: false
+# optimizer: 'SGD'
+# lr0: 0.01
+# lrf: 0.005
+
+## ----- resume setting ----- ##
+resume: true
+# pretrained: true
+# optimizer: 'SGD'
+# lr0: 0.0005
+# lrf: 0.2
+
+## ----- pretrained setting ----- ##
+# resume: false
+# pretrained: true
+# optimizer: 'SGD'
+# lr0: 0.0005
+# lrf: 0.2
