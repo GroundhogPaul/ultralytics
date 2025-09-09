@@ -1,12 +1,11 @@
 import cv2
 import utilBasicRunPose
 from ultralytics import YOLO
-import ncnn
 import pnnx
+import ncnn
 import os
 
 # ----- Load a model ----- #
-# sModelPath = "./runs/LapaTrain/01A_2nd500epoch_rotate_mosaic_128_smallBatch/weights/best.pt"
 sModelPath = "./runs/LapaTrain/176x3/weights/best.pt"
 sModelFolder = os.path.dirname(sModelPath)
 sModelOutputPath = os.path.join(sModelFolder, "best_ncnn_model")
