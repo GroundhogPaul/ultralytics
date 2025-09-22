@@ -18,6 +18,8 @@ Example:
 """
 
 from .block import (
+    PadForOdd, # PXY
+    DePadForOdd, # PXY
     C1,
     C2,
     C2PSA,

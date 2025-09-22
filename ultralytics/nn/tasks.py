@@ -11,6 +11,8 @@ import torch
 import torch.nn as nn
 
 from ultralytics.nn.modules import (
+    PadForOdd, # PXY
+    DePadForOdd, # PXY
     AIFI,
     C1,
     C2,

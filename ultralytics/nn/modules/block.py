@@ -11,6 +11,8 @@ from .conv import Conv, DWConv, GhostConv, LightConv, RepConv, autopad
 from .transformer import TransformerBlock
 
 __all__ = (
+    "PadForOdd", # PXY
+    "DePadForOdd", # PXY
     "DFL",
     "HGBlock",
     "HGStem",
@@ -52,6 +54,37 @@ __all__ = (
     "TorchVision",
 )
 
+# --------- PXY: to compact size 176x144 for 32x downsample model, add PadForOdd and DePadForOdd ------------- #
+class PadForOdd(nn.Module):
+    """Pad input tensor to make height and width even by adding one pixel if needed."""
+
+    def __init__(self):
+        """Initialize the PadForOdd module."""
+        super().__init__()
+
+    def forward(self, x):
+        """Pads the input tensor 'x' to ensure even height and width dimensions."""
+        h, w = x.shape[2:]
+        pad_h = 1 if h % 2 != 0 else 0
+        pad_w = 1 if w % 2 != 0 else 0
+        return F.pad(x, (0, pad_w, 0, pad_h), mode="replicate") if pad_h or pad_w else x
+    
+class DePadForOdd(nn.Module):
+    """Remove padding added to make height and width even."""
+
+    def __init__(self):
+        """Initialize the DePadForOdd module."""
+        super().__init__()
+
+    def forward(self, x):
+        """Removes padding from the input tensor 'x' to restore original height and width dimensions."""
+        _, _, h, w = x.shape
+        if (12 == h or 10 == h): # size = 176 or 144
+            h = h -1
+        if (12 == w or 10 == w):
+            w = w - 1
+        return x[:, :, :h, :w]
+# --------- PXY: end ------------- #
 
 class DFL(nn.Module):
     """
