@@ -13,6 +13,7 @@ from matplotlib import pyplot as plt
 sModelPath, imgSize, conf = r"./runs/LapaTrain/176x_ds16_1000epoch_MileStone\weights/best.pt", 176, 0.5
 sModelFolder = os.path.dirname(os.path.dirname(sModelPath))
 sImgFolder, sExt = r"D:\PxyAI\DataSet\Lapa-yolo11\valTinyMultiResolution\images\val", 'jpg'
+print("----- ", sModelPath, imgSize, conf, " -----")
 
 # ----- Collect false negative images from val dataset ----- #
 assert os.path.exists(sModelPath), "Model path does not exist: " + sModelPath
@@ -36,7 +37,7 @@ for sImgPath in lstImg:
     print(sImgPath)
     sFileName = sImgFolder + "_" + os.path.basename(sImgPath)
     faceRatio = float(sFileName[-8:-4])
-    results = model(sImgPath, verbose=False, imgsz = imgSize, device = 'cpu', conf = conf)
+    results = model(sImgPath, verbose=False, imgsz = imgSize, device = 'cpu', conf = conf, rect = False)
     res = results[0]
     if 1 == len(res):
         print("len(res) face found: pass img (1 face a time) ", sFileName)

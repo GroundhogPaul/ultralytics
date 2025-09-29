@@ -3,7 +3,7 @@ import utilBasicRunPose
 from ultralytics import YOLO
 
 # Load a model
-sModelPath, imgSize = "./runs/LapaTrain/160x1000epoch_ReLU/weights/best.pt", 160
+sModelPath, imgSize = "./runs/LapaTrain/176x_ds32_1000epoch_MileStone/weights/best.pt", 176
 sName = sModelPath.split('/')[-3]
 model = YOLO(sModelPath, task='pose')
 
@@ -14,6 +14,7 @@ metrics = model.val(
     project = "runs/LapaVal",
     name = sName,
     split="val",
+    rect=False,
     # save_json = True,
     # save_txt = True,
     single_cls = True,
