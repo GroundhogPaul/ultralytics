@@ -135,6 +135,8 @@ class BaseValidator:
             self.device = model.device  # update device
             self.args.half = model.fp16  # update half
             stride, pt, jit, engine = model.stride, model.pt, model.jit, model.engine
+            print("stride set to 16 to override default value 32")
+            stride = 16
             imgsz = check_imgsz(self.args.imgsz, stride=stride)
             if engine:
                 self.args.batch = model.batch_size
@@ -154,6 +156,8 @@ class BaseValidator:
             if not pt:
                 self.args.rect = False
             self.stride = model.stride  # used in get_dataloader() for padding
+            print("stride set to 16 to override default value 32")
+            self.stride = 16
             self.dataloader = self.dataloader or self.get_dataloader(self.data.get(self.args.split), self.args.batch)
 
             model.eval()

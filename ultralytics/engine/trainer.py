@@ -54,6 +54,7 @@ from ultralytics.utils.torch_utils import (
     torch_distributed_zero_first,
 )
 
+from ultralytics.nn.tasksPXY import ModifyYoloPoseN
 
 class BaseTrainer:
     """
@@ -275,7 +276,7 @@ class BaseTrainer:
         # Check imgsz
         print("stride set to 16 to override default value 32")
         # gs = max(int(self.model.stride.max() if hasattr(self.model, "stride") else 32), 32)  # grid size (max stride)
-        gs = max(int(self.model.stride.max() if hasattr(self.model, "stride") else 32), 16)  # grid size (max stride)
+        gs = 16 # PXY
         self.args.imgsz = check_imgsz(self.args.imgsz, stride=gs, floor=gs, max_dim=1)
         self.stride = gs  # for multiscale training
 
@@ -388,6 +389,15 @@ class BaseTrainer:
 
                 # Backward
                 self.scaler.scale(self.loss).backward()
+
+                # ----- add prune and distill pxy: step2_Constraint_train: l1 regulation ----- # 
+                if i < 5 and RANK in {-1, 0}:
+                    print("----- l1 shrink BN here, only for step 2, current open -----")
+                l1_lambda = 1e-2 * (1 - 0.9 * epoch / self.epochs)
+                ModifyYoloPoseN.shrink_bn(self.model, l1_lambda)
+                if i < 5 and RANK in {-1, 0}:
+                    print("----- l1 shrink BN here, only for step 2, current close -----")                
+                # ----- add end ----- 
 
                 # Optimize - https://pytorch.org/docs/master/notes/amp_examples.html
                 if ni - last_opt_step >= self.accumulate:
@@ -611,18 +621,22 @@ class BaseTrainer:
         return metrics, fitness
 
     def get_model(self, cfg=None, weights=None, verbose=True):
+        assert False, "this function must be overwritten by derived class"
         """Get model and raise NotImplementedError for loading cfg files."""
         raise NotImplementedError("This task trainer doesn't support loading cfg files")
 
     def get_validator(self):
+        assert False, "this function must be overwritten by derived class"
         """Returns a NotImplementedError when the get_validator function is called."""
         raise NotImplementedError("get_validator function not implemented in trainer")
 
     def get_dataloader(self, dataset_path, batch_size=16, rank=0, mode="train"):
+        assert False, "this function must be overwritten by derived class"
         """Returns dataloader derived from torch.data.Dataloader."""
         raise NotImplementedError("get_dataloader function not implemented in trainer")
 
     def build_dataset(self, img_path, mode="train", batch=None):
+        assert False, "this function must be overwritten by derived class"
         """Build dataset."""
         raise NotImplementedError("build_dataset function not implemented in trainer")
 
@@ -636,23 +650,28 @@ class BaseTrainer:
         return {"loss": loss_items} if loss_items is not None else ["loss"]
 
     def set_model_attributes(self):
+        assert False, "this function must be overwritten by derived class"
         """To set or update model parameters before training."""
         self.model.names = self.data["names"]
 
     def build_targets(self, preds, targets):
+        assert False, "this function must be overwritten by derived class"
         """Builds target tensors for training YOLO model."""
         pass
 
     def progress_string(self):
+        assert False, "this function must be overwritten by derived class"
         """Returns a string describing training progress."""
         return ""
 
     # TODO: may need to put these following functions into callback
     def plot_training_samples(self, batch, ni):
+        assert False, "this function must be overwritten by derived class"
         """Plots training samples during YOLO training."""
         pass
 
     def plot_training_labels(self):
+        assert False, "this function must be overwritten by derived class"
         """Plots training labels for YOLO model."""
         pass
 
@@ -666,6 +685,7 @@ class BaseTrainer:
             f.write(s + ("%.6g," * n % tuple([self.epoch + 1, t] + vals)).rstrip(",") + "\n")
 
     def plot_metrics(self):
+        assert False, "this function must be overwritten by derived class"
         """Plot and display metrics visually."""
         pass
 

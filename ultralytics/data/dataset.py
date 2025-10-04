@@ -182,7 +182,8 @@ class YOLODataset(BaseDataset):
             # transforms = v8_transforms(self, self.imgsz, hyp)
             transforms = v8_transforms_PXY(self, self.imgsz, hyp)
         else:
-            transforms = Compose([LetterBox(new_shape=(self.imgsz, self.imgsz), scaleup=False)])
+            print("stride set to 16 to override default value 32")
+            transforms = Compose([LetterBox(new_shape=(self.imgsz, self.imgsz), scaleup=False, stride=16)])
         transforms.append(
             Format(
                 bbox_format="xywh",

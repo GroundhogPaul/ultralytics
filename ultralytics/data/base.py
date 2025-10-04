@@ -280,6 +280,8 @@ class BaseDataset(Dataset):
             elif mini > 1:
                 shapes[i] = [1, 1 / mini]
 
+        self.pad = 0.0  # no padding
+        print("stride set to 16 to override default value 32")
         self.batch_shapes = np.ceil(np.array(shapes) * self.imgsz / self.stride + self.pad).astype(int) * self.stride
         self.batch = bi  # batch index of image
 
