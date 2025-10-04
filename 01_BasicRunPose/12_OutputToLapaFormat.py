@@ -12,7 +12,7 @@ import shutil
 # ----- load a model -----
 sModelPath, imgSize = "./runs/LapaTrain/01A_3rd300epoch_rotate_mosaic_128/weights/best.pt", 32
 
-conf = 0.51
+conf = 0.495
 
 model = YOLO(sModelPath)
 
@@ -66,6 +66,7 @@ for sImgPath in lstImg:
 
         pngIn = cv2.imread(sImgPath)
         sImgPathSave = os.path.join(sFolderOut_1face, sFileName).replace(".png", ".jpg")
+        print(sImgPathSave)
         cv2.imwrite(sImgPathSave, pngIn)
     
     # ----- save label file in Lapa format ----- #
@@ -73,8 +74,9 @@ for sImgPath in lstImg:
     sLabelPath = os.path.join(sFolderOut_1face, sLabelFile)
 
     with open(sLabelPath, 'w') as f:
-        f.write(f"106\n")
         lstXY = res[0].keypoints.xy[0].cpu().numpy().tolist()
+        nLM = len(lstXY)
+        f.write(f"{nLM}\n")
         for x,y in lstXY:
             # print(x, y)
             f.write(f"{x:.6f} {y:.6f}\n")
