@@ -92,20 +92,63 @@ except ImportError:
     thop = None
 
 from ultralytics.nn.tasks import *
+from ultralytics.nn.tasks import PoseModel
 
 class ModifyYoloPoseN():
 
-    def __init__(self, model):
-        assert False, "Do not use this class, it is only for reference."
+    def __init__(self):
+        # assert False, "Do not use this class, it is only for reference."
         # assert isinstance(model, )
         super().__init__()
-        self.model = model
 
-    def shrink_with_bn(self):
-        return
+    def shrink_bn(model, l1_lambda):
 
-    def prune_model(self):
-        return self.model
+        def _shrink_bn(bn, l1_lambda):
+            assert isinstance(bn, nn.BatchNorm2d)
+            bn.weight.grad.data.add_(l1_lambda * torch.sign(bn.weight.data))
+            bn.bias.grad.data.add_(1e-2 * torch.sign(bn.bias.data))
+
+        assert isinstance(model, PoseModel)
+        seq = model.model
+        assert isinstance(seq, nn.modules.container.Sequential)
+
+        # ----- shrink the BN of hidden layer of bottleneck ----- #
+        for name, m in seq.named_modules():
+            if isinstance(m, nn.BatchNorm2d):
+                _shrink_bn(m, l1_lambda)
+
+        # ----- shrink the BN of Conv and C3k2 layer ----- #
+        for i, layer in enumerate(seq):
+            if i == 3 or i == 5 or i == 8 or i == 19 or i == 22:
+                assert isinstance(layer, Conv)
+                _shrink_bn(layer.bn, l1_lambda)
+            
+            if i == 2 or i == 4 or i == 6 or i == 9 or i == 15 or i == 18 or i == 21 or i == 24:
+                assert isinstance(layer, C3k2)
+                _shrink_bn(layer.cv2.bn, l1_lambda)
+        
+        # ----- shrink the Pose ?? TODO ----- #
+        myPose = seq[-1]
+        assert isinstance(layer, Pose)
+        for idxLayer in range(myPose.nl):
+            PoseSubSeq = myPose.cv4[idxLayer]
+            assert isinstance(PoseSubSeq, nn.modules.container.Sequential)
+
+            conv0 = PoseSubSeq[0]
+            assert isinstance(conv0, Conv)
+            _shrink_bn(conv0.bn, l1_lambda)
+
+            conv1 = PoseSubSeq[1]
+            assert isinstance(conv1, Conv)
+            _shrink_bn(conv1.bn, l1_lambda)
+        
+        return 0
+    
+    def prune_model(model):
+        assert isinstance(model, PoseModel)
+        seq = model.model
+        assert isinstance(seq, nn.modules.container.Sequential)
+
 
 
 class RawDnsLoss():
