@@ -391,12 +391,12 @@ class BaseTrainer:
                 self.scaler.scale(self.loss).backward()
 
                 # ----- add prune and distill pxy: step2_Constraint_train: l1 regulation ----- # 
-                if i < 5 and RANK in {-1, 0}:
-                    print("----- l1 shrink BN here, only for step 2, current open -----")
-                l1_lambda = 1e-2 * (1 - 0.9 * epoch / self.epochs)
-                ModifyYoloPoseN.shrink_bn(self.model, l1_lambda)
-                if i < 5 and RANK in {-1, 0}:
-                    print("----- l1 shrink BN here, only for step 2, current close -----")                
+                # if i < 5 and RANK in {-1, 0}:
+                #     print("\n     ----- l1 shrink BN here, only for step 2, current open -----")
+                # l1_lambda = 1e-2 * (1 - 0.9 * epoch / self.epochs)
+                # ModifyYoloPoseN.shrink_bn(self.model, l1_lambda)
+                # if i < 5 and RANK in {-1, 0}:
+                #     print("----- l1 shrink BN here, only for step 2, current close -----")                
                 # ----- add end ----- 
 
                 # Optimize - https://pytorch.org/docs/master/notes/amp_examples.html
