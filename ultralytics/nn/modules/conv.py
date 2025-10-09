@@ -20,6 +20,7 @@ __all__ = (
     "SpatialAttention",
     "CBAM",
     "Concat",
+    "Concat_depad",
     "RepConv",
     "Index",
 )
@@ -330,6 +331,28 @@ class Concat(nn.Module):
 
     def forward(self, x):
         """Forward pass for the YOLOv8 mask Proto module."""
+        return torch.cat(x, self.d)
+
+class Concat_depad(nn.Module):
+    """Concatenate a list of tensors along dimension."""
+
+    def __init__(self, dimension=1):
+        """Concatenates a list of tensors along a specified dimension."""
+        super().__init__()
+        self.d = dimension
+
+    def forward(self, x):
+
+        """Removes padding from the input tensor 'x' to restore original height and width dimensions."""
+        _, _, h0, w0 = x[0].shape
+        _, _, h1, w1 = x[1].shape
+
+        if h0 != h1 or w0 != w1:
+            assert h0 == h1 + 1
+            assert w0 == w1 + 1
+            assert len(x) == 2, "only support 2 inputs"
+        x[0] = x[0][:, :, :h1, :w1]
+
         return torch.cat(x, self.d)
 
 

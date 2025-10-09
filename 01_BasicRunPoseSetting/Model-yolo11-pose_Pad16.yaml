@@ -34,20 +34,19 @@ backbone:
 # YOLO11n head
 head:
   - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 12 # /16
-  - [-1, 1, DePadForOdd, []]  # 13 # /16
-  - [[-1, 6], 1, Concat, [1]] # 14 # cat backbone P4 # /16
-  - [-1, 2, C3k2, [512, False]] # 15 # /16
+  - [[-1, 6], 1, Concat_depad, [1]] # 13 # cat backbone P4 # /16
+  - [-1, 2, C3k2, [512, False]] # 14 # /16
 
-  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 16 # /8
-  - [[-1, 4], 1, Concat, [1]] # 17 # /8
-  - [-1, 2, C3k2, [256, False]] # 18 (P3/8-small) # /8
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] # 15 # /8
+  - [[-1, 4], 1, Concat, [1]] # 16 # /8
+  - [-1, 2, C3k2, [256, False]] # 17 (P3/8-small) # /8
 
-  - [-1, 1, Conv, [256, 3, 2]] # 19 /16
-  - [[-1, 15], 1, Concat, [1]] # 20 # cat head P4 # /16
-  - [-1, 2, C3k2, [512, False]] # 21 (P4/16-medium) # /16
+  - [-1, 1, Conv, [256, 3, 2]] # 18 /16
+  - [[-1, 14], 1, Concat, [1]] # 19 # cat head P4 # /16
+  - [-1, 2, C3k2, [512, False]] # 20 (P4/16-medium) # /16
 
-  - [-1, 1, Conv, [512, 3, 2]] # 22 # /32
-  - [[-1, 11], 1, Concat, [1]] # 23 # cat head P5 /32
-  - [-1, 2, C3k2, [1024, True]] # 24 (P5/32-large) / 32             
+  - [-1, 1, Conv, [512, 3, 2]] # 21 # /32
+  - [[-1, 11], 1, Concat, [1]] # 22 # cat head P5 /32
+  - [-1, 2, C3k2, [1024, True]] # 23 (P5/32-large) / 32             
 
-  - [[18, 21, 24], 1, Pose, [nc, kpt_shape]] # Detect(P3, P4, P5) 
+  - [[17, 20, 23], 1, Pose, [nc, kpt_shape]] # Detect(P3, P4, P5) 

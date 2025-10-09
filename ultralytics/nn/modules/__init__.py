@@ -64,6 +64,7 @@ from .conv import (
     CBAM,
     ChannelAttention,
     Concat,
+    Concat_depad, # PXY
     Conv,
     Conv2,
     ConvTranspose,
@@ -104,6 +105,7 @@ __all__ = (
     "SpatialAttention",
     "CBAM",
     "Concat",
+    "Concat_depad", # PXY
     "TransformerLayer",
     "TransformerBlock",
     "MLPBlock",
