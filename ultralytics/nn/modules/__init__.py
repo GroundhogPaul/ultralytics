@@ -78,6 +78,7 @@ from .conv import (
     SpatialAttention,
 )
 from .head import OBB, Classify, Detect, Pose, RTDETRDecoder, Segment, WorldDetect, v10Detect
+from .headPXY import PosePXY
 from .transformer import (
     AIFI,
     MLP,
@@ -134,6 +135,7 @@ __all__ = (
     "Detect",
     "Segment",
     "Pose",
+    "PosePXY",
     "Classify",
     "TransformerEncoderLayer",
     "RepC3",
