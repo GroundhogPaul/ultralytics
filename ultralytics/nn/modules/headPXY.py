@@ -28,7 +28,13 @@ class PosePXY(Detect):
         self.nk = kpt_shape[0] * kpt_shape[1]  # number of keypoints total
 
         c4 = max(ch[0] // 4, self.nk)
-        self.cv4 = nn.ModuleList(nn.Sequential(Conv(x, c4//2, 3), Conv(c4//2, c4//2, 3), nn.Conv2d(c4//2, self.nk, 1)) for x in ch)
+        c4half = c4 // 2
+        c4half_even = c4half + c4half % 2  # ensure even
+        c4half_even = 24
+        self.cv4 = nn.ModuleList(nn.Sequential(Conv(x, c4half_even, k = 3, s = 1, p = 1, g = 2), 
+                                               Conv(c4half_even, c4half_even, k = 1, s = 1), 
+                                               Conv(c4half_even, c4half_even, k = 3, s = 1, p = 1, g = 3), 
+                                               Conv(c4half_even, c4half_even, 3), nn.Conv2d(c4half_even, self.nk, 1)) for x in ch)
 
     def forward(self, x):
         """Perform forward pass through YOLO model and return predictions."""
