@@ -30,11 +30,16 @@ class PosePXY(Detect):
         c4 = max(ch[0] // 4, self.nk)
         c4half = c4 // 2
         c4half_even = c4half + c4half % 2  # ensure even
-        c4half_even = 24
-        self.cv4 = nn.ModuleList(nn.Sequential(Conv(x, c4half_even, k = 3, s = 1, p = 1, g = 2), 
-                                               Conv(c4half_even, c4half_even, k = 1, s = 1), 
-                                               Conv(c4half_even, c4half_even, k = 3, s = 1, p = 1, g = 3), 
-                                               Conv(c4half_even, c4half_even, 3), nn.Conv2d(c4half_even, self.nk, 1)) for x in ch)
+        c4half_even = 64
+        self.cv4 = nn.ModuleList(nn.Sequential(
+            Conv(x, c4half_even, k = 3, s = 1, p = 1, g = 4),  # group conv
+            Conv(c4half_even, c4half_even, k = 1, s = 1), # pointwise conv
+            Conv(c4half_even, c4half_even, k = 3, s = 1, p = 1, g = 4), # group conv
+            nn.Conv2d(c4half_even, self.nk, 1)) for x in ch)
+        # self.cv4 = nn.ModuleList(nn.Sequential(
+        #     Conv(x, c4, 3), 
+        #     Conv(c4, c4, 3), 
+        #     nn.Conv2d(c4, self.nk, 1)) for x in ch)
 
     def forward(self, x):
         """Perform forward pass through YOLO model and return predictions."""
