@@ -107,7 +107,7 @@ class DFL(nn.Module):
         """Applies a transformer layer on input tensor 'x' and returns a tensor."""
         b, _, a = x.shape  # batch, channels, anchors
         return self.conv(x.view(b, 4, self.c1, a).transpose(2, 1).softmax(1)).view(b, 4, a)
-        # 经过self.conv()加权后，转置到bin方向并softmax归一化
+        # 把网络的输出转置到bin方向并softmax归一化，然后进conv加权
 
         # return self.conv(x.view(b, self.c1, 4, a).softmax(1)).view(b, 4, a)
 
