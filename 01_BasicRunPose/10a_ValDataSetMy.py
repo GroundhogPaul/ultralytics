@@ -10,7 +10,8 @@ import os
 import shutil
 from matplotlib import pyplot as plt
 
-sModelPath, imgSize, conf = r"./runs/LapaTrain/176x_ds16_1000epoch_MileStone\weights/best.pt", 176, 0.5
+sModelPath, imgSize = r".\runs\LapaTrain\160xNegativeWithNoMosaic/weights/epoch750.pt", 160
+conf = 0.5
 sModelFolder = os.path.dirname(os.path.dirname(sModelPath))
 sImgFolder, sExt = r"D:\PxyAI\DataSet\Lapa-yolo11\valTinyMultiResolution\images\val", 'jpg'
 print("----- ", sModelPath, imgSize, conf, " -----")
