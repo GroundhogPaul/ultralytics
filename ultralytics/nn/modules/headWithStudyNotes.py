@@ -67,6 +67,7 @@ class Detect(nn.Module):
         )
 
         self.dfl = DFL(self.reg_max) if self.reg_max > 1 else nn.Identity()
+        # 经过self.dfl的卷积之后，得到的会是一个0~reg_max-1的加权和小数，代表框的某个边距的预测值
 
         if self.end2end:
             self.one2one_cv2 = copy.deepcopy(self.cv2)
@@ -79,6 +80,8 @@ class Detect(nn.Module):
 
         for i in range(self.nl):
             x[i] = torch.cat((self.cv2[i](x[i]), self.cv3[i](x[i])), 1)
+            # concat 框预测和分类预测, inference模式下会拆开成 box, cls = x_cat.split((self.reg_max * 4, self.nc), 1)
+
         if self.training:  # Training path
             return x
         y = self._inference(x)
@@ -123,6 +126,8 @@ class Detect(nn.Module):
         else:
             box, cls = x_cat.split((self.reg_max * 4, self.nc), 1)
 
+        # 以下的种种export分支，主要是为了适配不同的推理引擎对数值稳定性的要求
+        # 主要计算只有decode_bboxes, 是将DFL输出的边距概率分布转换成对应anchor point的绝对位置（边距的意思就是边到anchor point的距离）
         if self.export and self.format in {"tflite", "edgetpu"}:
             # Precompute normalization factor to increase numerical stability
             # See https://github.com/ultralytics/ultralytics/issues/7371
